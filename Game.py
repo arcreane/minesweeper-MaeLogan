@@ -1,6 +1,7 @@
 import AskInputs
 import random
 
+
 # Function to Init Game
 # ask all information for the game, size / number of mines
 def InitGame():
@@ -20,20 +21,37 @@ def InitGame():
 
 def GenerateGame(value):
     coord_mine = GenerateCoordMine(value)
-    map = GenerateMap(value, coord_mine)
-    print(map)
+    map_game = GenerateMap(value, coord_mine)
+    PrintMap(map_game)
 
 
 def GenerateCoordMine(value):
     coordinates = set()
-    x,y = random.randint(value["width"], value["height"]), random.randint(value["width"], value["height"])
+    x, y = random.randint(0, value["width"] - 1), random.randint(0, value["height"] - 1)
     for nbr in range(value["number_mines"]):
-        coordinates.add((x,y))
-        x,y = random.randint(value["width"], value["height"]), random.randint(value["width"], value["height"])
+        coordinates.add((x, y))
+        x, y = random.randint(0, value["width"] - 1), random.randint(0, value["height"] - 1)
     return coordinates
 
-def GenerateMap(value, coord_mine):
 
+def GenerateMap(value, coord_mine):
+    map_game = []
+    for map_w in range(value["width"]):
+        line = []
+        for map_h in range(value["height"]):
+            if (map_w, map_h) in coord_mine:
+                line.append("1")
+            else:
+                line.append("0")
+        map_game.append(line)
+    return map_game
+
+
+def PrintMap(map_game):
+    for line in map_game:
+        for tile in line:
+            print(tile, end="")
+        print()
 
 
 def Game():
