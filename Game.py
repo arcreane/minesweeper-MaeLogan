@@ -40,7 +40,7 @@ def GenerateMap(value, coord_mine):
     for map_w in range(value["width"]):
         line = []
         for map_h in range(value["height"]):
-            line.append("⬛ ")
+            line.append("⬛  ")
         map_game.append(line)
     return map_game
 
@@ -56,13 +56,22 @@ def PrintMap(map_game):
 
     print("\t", end="")
     for i in range(0, len(map_game[1])):
-        print(i, end=" ")
+        print("{}  ".format(i) if i < 9 else "{} ".format(i) ,end="")
+    print()
 
+def get_tile(map_game, x, y):
+    return map_game[x][y]
 
 def Game():
     value_game = InitGame()
     coord_mine, map_game = GenerateGame(value_game)
-
-
-
+    PrintMap(map_game)
+    while True:
+        x = AskInputs.AskInputInt("choose a Coordinate : First the position X → : ")
+        y = AskInputs.AskInputInt("position Y ↑ : ")
+        if AskInputs.AskInputString("you choose {}-{} ? (Type : Yes or No) ".format(x, y), "Yes", "No") == "Yes":
+            if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U", "F") == "F":
+                pass
+        else:
+            pass
 Game()
