@@ -11,6 +11,13 @@ def InitGame():
                                                                                                   |_|              """)
     print(120*"*")
 
+    width = AskInputs.AskInputInt("Enter field width : ")
+    height = AskInputs.AskInputInt("Enter field height : ")
+    number_mines = AskInputs.AskInputInt("How many mines ? ")
+    return {"width": width, "height": height, "number_mines": number_mines}
 
+def Game():
+    value_game = InitGame()
+    print(value_game)
 
-InitGame()
+Game()
