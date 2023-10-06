@@ -5,7 +5,7 @@ def AskInputInt(to_print):
         num = input(to_print)
         try:
             val = int(num)
-            break;
+            break
         except ValueError:
             print("This is not a number. Please enter a valid number")
 
