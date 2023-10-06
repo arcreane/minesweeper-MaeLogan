@@ -55,6 +55,10 @@ def PrintMap(map_game):
                 print("⬛  ", end="")
             elif tile == 2:
                 print("⚑  ", end="")
+            elif tile == 3:
+                print("⬜  ", end="")
+            elif tile > 3:
+                print(tile - 3, " ", end="")
 
         print()
 
@@ -62,6 +66,8 @@ def PrintMap(map_game):
     for i in range(0, len(map_game[1])):
         print("{}  ".format(i) if i < 9 else "{} ".format(i), end="")
     print()
+
+
 
 
 def get_tile(map_game, x, y):
@@ -84,7 +90,36 @@ def CanDoAction(map_game, x, y):
         return False
 
 
-def action_on_map(map_game, x, y):
+def Undercover_Recurs(map_game, x, y, coord_mine):
+    if map_game[y][x] != 1:
+        return 0
+    neighbors = []
+    rows = len(map_game)
+    cols = len(map_game[0])
+
+    mine_arround = 0
+    for i in range(max(0, x - 1), min(rows, x + 2)):
+        for j in range(max(0, y - 1), min(cols, y + 2)):
+            if (i, j) != (x, y):
+                if (i,j) in coord_mine:
+                    mine_arround += 1
+                map_game[y][x] = 3
+
+    if mine_arround == 0:
+        for i in range(max(0, x - 1), min(rows, x + 2)):
+            for j in range(max(0, y - 1), min(cols, y + 2)):
+                Undercover_Tile(map_game, i,j ,coord_mine)
+    map_game[y][x] = 3 + mine_arround
+    return neighbors
+
+
+def Undercover_Tile(map_game, x, y, coord_mine):
+    if (x, y) in coord_mine:
+        Loose()
+    Undercover_Recurs(map_game, x, y, coord_mine)
+
+
+def action_on_map(map_game, x, y, coord_mine):
     can, option = CanDoAction(map_game, x, y)
     if not can:
         return map_game
@@ -92,14 +127,14 @@ def action_on_map(map_game, x, y):
         if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U", "F") == "F":
             map_game[y][x] = 2
         else:
-            pass #undercover
+            Undercover_Tile(map_game, x, y, coord_mine)
         return map_game
     elif option == "Flag":
-        if AskInputs.AskInputString("Its a flag tile, do you want to unflagged it : Type Yes or No", "Yes", "No") == "Yes":
+        if AskInputs.AskInputString("Its a flag tile, do you want to unflagged it : Type Yes or No", "Yes",
+                                    "No") == "Yes":
             map_game[y][x] = 1
             if AskInputs.AskInputString("Do you want to undercover it: Type Yes or No", "Yes", "No") == "Yes":
                 pass
-
     else:
         print("erreur")
         return map_game
@@ -109,15 +144,24 @@ def Game():
     value_game = InitGame()
     coord_mine, map_game = GenerateGame(value_game)
     while True:
+        print(coord_mine)
         PrintMap(map_game)
         x = AskInputs.AskInputInt("choose a Coordinate : First the position X → : ")
         y = AskInputs.AskInputInt("position Y ↑ : ")
         if AskInputs.AskInputString("you choose {}-{} ? (Type : Yes or No) ".format(x, y), "Yes", "No") == "Yes":
             if TryCoord(map_game, x, y):
                 pass
-                action_on_map(map_game, x, y)
+                action_on_map(map_game, x, y, coord_mine)
         else:
             pass
+
+
+def Loose():
+    pass
+
+
+def Win():
+    pass
 
 
 Game()
