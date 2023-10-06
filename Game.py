@@ -53,6 +53,9 @@ def PrintMap(map_game):
         for tile in line:
             if tile == 1:
                 print("⬛  ", end="")
+            elif tile == 2:
+                print("⚑  ", end="")
+
         print()
 
     print("\t", end="")
@@ -62,7 +65,7 @@ def PrintMap(map_game):
 
 
 def get_tile(map_game, x, y):
-    return map_game[x][y]
+    return map_game[y][x]
 
 
 def TryCoord(map_game, x, y):
@@ -72,24 +75,47 @@ def TryCoord(map_game, x, y):
     return False
 
 
-def action_on_map(map_game, x,y):
+def CanDoAction(map_game, x, y):
+    if map_game[y][x] == 1:
+        return True, "Hide"
+    elif map_game[y][x] == 2:
+        return True, "Flag"
+    elif map_game[y][x] == 0:
+        return False
 
-    if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U",
-                                "F") == "F":
-        pass
+
+def action_on_map(map_game, x, y):
+    can, option = CanDoAction(map_game, x, y)
+    if not can:
+        return map_game
+    if option == "Hide":
+        if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U", "F") == "F":
+            map_game[y][x] = 2
+        else:
+            pass #undercover
+        return map_game
+    elif option == "Flag":
+        if AskInputs.AskInputString("Its a flag tile, do you want to unflagged it : Type Yes or No", "Yes", "No") == "Yes":
+            map_game[y][x] = 1
+            if AskInputs.AskInputString("Do you want to undercover it: Type Yes or No", "Yes", "No") == "Yes":
+                pass
+
+    else:
+        print("erreur")
+        return map_game
 
 
 def Game():
     value_game = InitGame()
     coord_mine, map_game = GenerateGame(value_game)
-    PrintMap(map_game)
     while True:
+        PrintMap(map_game)
         x = AskInputs.AskInputInt("choose a Coordinate : First the position X → : ")
         y = AskInputs.AskInputInt("position Y ↑ : ")
         if AskInputs.AskInputString("you choose {}-{} ? (Type : Yes or No) ".format(x, y), "Yes", "No") == "Yes":
             if TryCoord(map_game, x, y):
                 pass
-                action_on_map(map_game,x,y)
+                action_on_map(map_game, x, y)
         else:
             pass
 
