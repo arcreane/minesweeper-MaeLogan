@@ -16,7 +16,7 @@ def AskInputInt(to_print):
 #take a string to print for input and a tuple of every options
 def AskInputString(to_print, *options):
     while True:
-        str = input(to_print)
+        str = input(to_print + "\n")
         if str in options:
             return str
         print("You don't choose a good option! \n")
