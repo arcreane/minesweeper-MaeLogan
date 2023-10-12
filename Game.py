@@ -89,12 +89,15 @@ def TryCoord(map_game, x, y):
 
 
 def CanDoAction(map_game, x, y):
+
     if map_game[y][x] == 1:
         return True, "Hide"
     elif map_game[y][x] == 2:
         return True, "Flag"
     elif map_game[y][x] == 0:
-        return False
+        return False,"0"
+    else :
+        return False,"0"
 
 
 def how_many_mine(map_game,x,y, coord_mine):
@@ -111,7 +114,8 @@ def how_many_mine(map_game,x,y, coord_mine):
 
 def Undercover_Recurs(map_game, x, y, coord_mine):
     if map_game[y][x] != 1:
-        return 0
+        "test"
+        return "test"
     mine_arround = how_many_mine(map_game,x,y,coord_mine)
     rows = len(map_game)
     cols = len(map_game[0])
@@ -131,6 +135,7 @@ def Undercover_Tile(map_game, x, y, coord_mine):
 def action_on_map(map_game, x, y, coord_mine):
     can, option = CanDoAction(map_game, x, y)
     if not can:
+        print("Already play on this tile", '\n')
         return map_game
     if option == "Hide":
         if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U", "F") == "F":
@@ -185,29 +190,23 @@ def is_win(map_game, coord_mine):
 
 def Loose():
     print("\n\n")
-    print("""█████ █████                        █████                                         
-░░███ ░░███                        ░░███                                          
- ░░███ ███    ██████  █████ ████    ░███         ██████   ██████   █████   ██████ 
-  ░░█████    ███░░███░░███ ░███     ░███        ███░░███ ███░░███ ███░░   ███░░███
-   ░░███    ░███ ░███ ░███ ░███     ░███       ░███ ░███░███ ░███░░█████ ░███████ 
-    ░███    ░███ ░███ ░███ ░███     ░███      █░███ ░███░███ ░███ ░░░░███░███░░░  
-    █████   ░░██████  ░░████████    ███████████░░██████ ░░██████  ██████ ░░██████ 
-   ░░░░░     ░░░░░░    ░░░░░░░░    ░░░░░░░░░░░  ░░░░░░   ░░░░░░  ░░░░░░   ░░░░░░  
-                                                                                  """)
+    print(""" ___ ___                    __                             
+|   |   |.-----..--.--.    |  |.-----..-----..-----..-----.
+ \     / |  _  ||  |  |    |  ||  _  ||  _  ||__ --||  -__|
+  |___|  |_____||_____|    |__||_____||_____||_____||_____|
+                                                           """)
     quit()
 
 
 def Win():
     print("\n\n")
-    print("""█████ █████                        █████   ███   █████  ███            
-░░███ ░░███                        ░░███   ░███  ░░███  ░░░             
- ░░███ ███    ██████  █████ ████    ░███   ░███   ░███  ████  ████████  
-  ░░█████    ███░░███░░███ ░███     ░███   ░███   ░███ ░░███ ░░███░░███ 
-   ░░███    ░███ ░███ ░███ ░███     ░░███  █████  ███   ░███  ░███ ░███ 
-    ░███    ░███ ░███ ░███ ░███      ░░░█████░█████░    ░███  ░███ ░███ 
-    █████   ░░██████  ░░████████       ░░███ ░░███      █████ ████ █████
-   ░░░░░     ░░░░░░    ░░░░░░░░         ░░░   ░░░      ░░░░░ ░░░░ ░░░░░ 
-                                                                        """)
+    print(""" ___ ___                    ________  __        
+|   |   |.-----..--.--.    |  |  |  ||__|.-----.
+ \     / |  _  ||  |  |    |  |  |  ||  ||     |
+  |___|  |_____||_____|    |________||__||__|__|
+                                                
+
+""")
 
 
 Game()
