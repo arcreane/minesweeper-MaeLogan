@@ -2,9 +2,9 @@ import AskInputs
 import difficulty
 import random
 
-# Function to Init Game
+# Function to Init game
 # ask all information for the game, size / number of mines
-def InitGame():
+def init_game():
     print(""" __        __   _                            _          __  __ _            ____                                   
  \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___   |  \/  (_)_ __   ___/ ___|_      _____  ___ _ __   ___ _ __ 
   \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | |\/| | | '_ \ / _ \___ \ \ /\ / / _ \/ _ \ '_ \ / _ \ '__|
@@ -29,13 +29,13 @@ def InitGame():
 
 
 # generate all the coord of all mine and generate the map with the width, height
-def GenerateGame(value):
-    coord_mine = GenerateCoordMine(value)
-    map_game = GenerateMap(value, coord_mine)
+def generate_game(value):
+    coord_mine = generate_coord_mine(value)
+    map_game = generate_map(value, coord_mine)
     return coord_mine, map_game
 
 
-def GenerateCoordMine(value):
+def generate_coord_mine(value):
     coordinates = set()
     x, y = random.randint(0, value["width"] - 1), random.randint(0, value["height"] - 1)
     for nbr in range(value["number_mines"]):
@@ -44,7 +44,7 @@ def GenerateCoordMine(value):
     return coordinates
 
 
-def GenerateMap(value, coord_mine):
+def generate_map(value, coord_mine):
     map_game = []
     for map_h in range(value["height"]):
         line = []
@@ -54,7 +54,7 @@ def GenerateMap(value, coord_mine):
     return map_game
 
 
-def PrintMap(map_game):
+def print_map(map_game):
     compt_x = 0
     for line in map_game:
         print(compt_x, end="\t")
@@ -81,14 +81,14 @@ def get_tile(map_game, x, y):
     return map_game[y][x]
 
 
-def TryCoord(map_game, x, y):
+def try_coord(map_game, x, y):
     if len(map_game) > y and len(map_game[0]) > x:
         return True
     print("Your coordinate does not exist")
     return False
 
 
-def CanDoAction(map_game, x, y):
+def can_do_action(map_game, x, y):
 
     if map_game[y][x] == 1:
         return True, "Hide"
@@ -112,7 +112,7 @@ def how_many_mine(map_game,x,y, coord_mine):
                 map_game[y][x] = 3
     return mine_arround
 
-def Undercover_Recurs(map_game, x, y, coord_mine):
+def undercover_recurs(map_game, x, y, coord_mine):
     if map_game[y][x] != 1:
         "test"
         return "test"
@@ -122,18 +122,18 @@ def Undercover_Recurs(map_game, x, y, coord_mine):
     if mine_arround == 0:
         for i in range(max(0, x - 1), min(rows, x + 2)):
             for j in range(max(0, y - 1), min(cols, y + 2)):
-                Undercover_Tile(map_game, i, j, coord_mine)
+                undercover_tile(map_game, i, j, coord_mine)
     map_game[y][x] = 3 + mine_arround
 
 
-def Undercover_Tile(map_game, x, y, coord_mine):
+def undercover_tile(map_game, x, y, coord_mine):
     if (x, y) in coord_mine:
-        Loose()
-    Undercover_Recurs(map_game, x, y, coord_mine)
+        loose()
+    undercover_recurs(map_game, x, y, coord_mine)
 
 
 def action_on_map(map_game, x, y, coord_mine):
-    can, option = CanDoAction(map_game, x, y)
+    can, option = can_do_action(map_game, x, y)
     if not can:
         print("Already play on this tile", '\n')
         return map_game
@@ -141,7 +141,7 @@ def action_on_map(map_game, x, y, coord_mine):
         if AskInputs.AskInputString("Do you want to undercover a tile (type : U) or flag a mine (F) ", "U", "F") == "F":
             map_game[y][x] = 2
         else:
-            Undercover_Tile(map_game, x, y, coord_mine)
+            undercover_tile(map_game, x, y, coord_mine)
         return map_game
     elif option == "Flag":
         if AskInputs.AskInputString("Its a flag tile, do you want to unflagged it : Type Yes or No", "Yes",
@@ -154,21 +154,21 @@ def action_on_map(map_game, x, y, coord_mine):
         return map_game
 
 
-def Game():
-    value_game = InitGame()
-    coord_mine, map_game = GenerateGame(value_game)
+def game():
+    value_game = init_game()
+    coord_mine, map_game = generate_game(value_game)
     game_finish = True
     while game_finish:
         print(coord_mine)
-        PrintMap(map_game)
+        print_map(map_game)
         x = AskInputs.AskInputInt("choose a Coordinate : position X → : ")
         y = AskInputs.AskInputInt("choose a Coordinate : position Y ↑ : ")
         if AskInputs.AskInputString("you choose {}-{} ? (Type : Yes or No) ".format(x, y), "Yes", "No") == "Yes":
-            if TryCoord(map_game, x, y):
+            if try_coord(map_game, x, y):
                 # pass
                 action_on_map(map_game, x, y, coord_mine)
                 if is_win(map_game, coord_mine):
-                    Win()
+                    win()
                     game_finish = False
         else:
             pass
@@ -188,7 +188,7 @@ def is_win(map_game, coord_mine):
         return False
 
 
-def Loose():
+def loose():
     print("\n\n")
     print(""" ___ ___                    __                             
 |   |   |.-----..--.--.    |  |.-----..-----..-----..-----.
@@ -198,7 +198,7 @@ def Loose():
     quit()
 
 
-def Win():
+def win():
     print("\n\n")
     print(""" ___ ___                    ________  __        
 |   |   |.-----..--.--.    |  |  |  ||__|.-----.
@@ -209,4 +209,4 @@ def Win():
 """)
 
 
-Game()
+game()
