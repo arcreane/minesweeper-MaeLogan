@@ -1,7 +1,6 @@
 import AskInputs
 import random
 
-
 # Function to Init Game
 # ask all information for the game, size / number of mines
 def InitGame():
@@ -68,8 +67,6 @@ def PrintMap(map_game):
     print()
 
 
-
-
 def get_tile(map_game, x, y):
     return map_game[y][x]
 
@@ -101,14 +98,14 @@ def Undercover_Recurs(map_game, x, y, coord_mine):
     for i in range(max(0, x - 1), min(rows, x + 2)):
         for j in range(max(0, y - 1), min(cols, y + 2)):
             if (i, j) != (x, y):
-                if (i,j) in coord_mine:
+                if (i, j) in coord_mine:
                     mine_arround += 1
                 map_game[y][x] = 3
 
     if mine_arround == 0:
         for i in range(max(0, x - 1), min(rows, x + 2)):
             for j in range(max(0, y - 1), min(cols, y + 2)):
-                Undercover_Tile(map_game, i,j ,coord_mine)
+                Undercover_Tile(map_game, i, j, coord_mine)
     map_game[y][x] = 3 + mine_arround
     return neighbors
 
@@ -143,21 +140,39 @@ def action_on_map(map_game, x, y, coord_mine):
 def Game():
     value_game = InitGame()
     coord_mine, map_game = GenerateGame(value_game)
-    while True:
+    game_finish = True
+    while game_finish:
         print(coord_mine)
         PrintMap(map_game)
-        x = AskInputs.AskInputInt("choose a Coordinate : First the position X → : ")
-        y = AskInputs.AskInputInt("position Y ↑ : ")
+        x = AskInputs.AskInputInt("choose a Coordinate : position X → : ")
+        y = AskInputs.AskInputInt("choose a Coordinate : position Y ↑ : ")
         if AskInputs.AskInputString("you choose {}-{} ? (Type : Yes or No) ".format(x, y), "Yes", "No") == "Yes":
             if TryCoord(map_game, x, y):
-                pass
+                # pass
                 action_on_map(map_game, x, y, coord_mine)
+                if is_win(map_game, coord_mine):
+                    Win()
+                    game_finish = False
         else:
             pass
 
 
+def is_win(map_game, coord_mine):
+    count_mine = len(coord_mine)
+    count_tile = 0
+    for row in map_game:
+        for char in row:
+            if char == 1 or char == 2:
+                count_tile += 1
+
+    if count_tile == count_mine:
+        return True
+    else:
+        return False
+
+
 def Loose():
-    print(150 * "/")
+    print("\n", 150 * "/\n")
     print("""█████ █████                        █████                                         
 ░░███ ░░███                        ░░███                                          
  ░░███ ███    ██████  █████ ████    ░███         ██████   ██████   █████   ██████ 
@@ -169,9 +184,10 @@ def Loose():
                                                                                   """)
     quit()
 
+
 def Win():
-    print(150 * "/")
-    print("""" █████ █████                        █████   ███   █████  ███            
+    print("\n", 150 * "/\n")
+    print("""█████ █████                        █████   ███   █████  ███            
 ░░███ ░░███                        ░░███   ░███  ░░███  ░░░             
  ░░███ ███    ██████  █████ ████    ░███   ░███   ░███  ████  ████████  
   ░░█████    ███░░███░░███ ░███     ░███   ░███   ░███ ░░███ ░░███░░███ 
