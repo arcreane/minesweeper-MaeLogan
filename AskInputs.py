@@ -1,6 +1,21 @@
-#function to ask an input and make sure its an int
-#take a string to print when asking the input
+
 def AskInputInt(to_print):
+    """
+       Prompt the user for input and validate it as an integer.
+
+       This function displays the provided message and continuously prompts the user
+       for input until a valid integer is provided. If the user enters a non-integer value,
+       an error message is displayed, and the user is prompted again.
+
+       Parameters:
+       - to_print (str): The message to display to the user when requesting input.
+
+       Returns:
+       int: The validated integer input provided by the user.
+
+       Example Usage:
+       - width = AskInputInt("Enter field width: ")  # Example usage to get an integer input.
+       """
     while True:
         num = input(to_print)
         try:
@@ -12,9 +27,25 @@ def AskInputInt(to_print):
     return val
 
 
-#function to request an input string and make sure that the response is one of the options
-#take a string to print for input and a tuple of every options
 def AskInputString(to_print, *options):
+    """
+        Prompt the user for input and validate it against a set of specified options.
+
+        This function displays the provided message and continuously prompts the user
+        for input until a valid option from the provided set of options is entered. If the
+        user enters an invalid option, an error message is displayed, and the user is prompted again.
+
+        Parameters:
+        - to_print (str): The message to display to the user when requesting input.
+        - *options (str): Variable number of strings representing the valid options.
+
+        Returns:
+        str: The validated string input provided by the user, matching one of the specified options.
+
+        Example Usage:
+        - choice = AskInputString("Choose an option:", "Yes", "No", "Quit")
+          # Example usage to get a string input from a set of options ("Yes", "No", "Quit").
+        """
     while True:
         str = input(to_print + "\n")
         if str in options:
