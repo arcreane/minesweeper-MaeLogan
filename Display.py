@@ -1,5 +1,3 @@
-import Game
-
 
 def lose():
     """
