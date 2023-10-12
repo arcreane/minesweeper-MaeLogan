@@ -1,4 +1,5 @@
 import AskInputs
+import difficulty
 import random
 
 # Function to Init Game
@@ -12,10 +13,18 @@ def InitGame():
                                                                                                   |_|              """)
     print(120 * "*")
 
+    input_difficulty = AskInputs.AskInputString("Choose a difficulty : \n\t -Easy \n\t -Medium \n\t -Hard \n\t -Custom", "Easy", "Medium", "Hard", "Custom")
 
-    width = AskInputs.AskInputInt("Enter field width : ")
-    height = AskInputs.AskInputInt("Enter field height : ")
-    number_mines = AskInputs.AskInputInt("How many mines ? ")
+    if(input_difficulty == "Easy"):
+        width, height, number_mines = difficulty.initEasy()
+    elif(input_difficulty == "Medium"):
+        width, height, number_mines = difficulty.initMedium()
+    elif(input_difficulty == "Hard"):
+        width, height, number_mines = difficulty.initHard()
+    else:
+        width = AskInputs.AskInputInt("Enter field width : ")
+        height = AskInputs.AskInputInt("Enter field height : ")
+        number_mines = AskInputs.AskInputInt("How many mines ? ")
     return {"width": width, "height": height, "number_mines": number_mines}
 
 
@@ -175,7 +184,7 @@ def is_win(map_game, coord_mine):
 
 
 def Loose():
-    print("\n", 150 * "/", end="\n")
+    print("\n\n")
     print("""█████ █████                        █████                                         
 ░░███ ░░███                        ░░███                                          
  ░░███ ███    ██████  █████ ████    ░███         ██████   ██████   █████   ██████ 
@@ -189,7 +198,7 @@ def Loose():
 
 
 def Win():
-    print("\n", 150 * "/", end="\n")
+    print("\n\n")
     print("""█████ █████                        █████   ███   █████  ███            
 ░░███ ░░███                        ░░███   ░███  ░░███  ░░░             
  ░░███ ███    ██████  █████ ████    ░███   ░███   ░███  ████  ████████  
