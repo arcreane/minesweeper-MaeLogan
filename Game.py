@@ -9,7 +9,7 @@ def get_tile(map_game, x, y):
     return map_game[y][x]
 
 
-# test a coord to try if its out of bound
+# test a coord to try if is out of bound
 def try_coord(map_game, x, y):
     if len(map_game) > y and len(map_game[0]) > x:
         return True
@@ -29,35 +29,35 @@ def can_do_action(map_game, x, y):
         return False, "0"
 
 
-# count how many mines arround a tile
+# count how many mines around a tile
 def how_many_mine(map_game, x, y, coord_mine):
-    mine_arround = 0
+    mine_around = 0
     rows = len(map_game)
     cols = len(map_game[0])
     for i in range(max(0, x - 1), min(rows, x + 2)):
         for j in range(max(0, y - 1), min(cols, y + 2)):
             if (i, j) != (x, y):
                 if (i, j) in coord_mine:
-                    mine_arround += 1
+                    mine_around += 1
                 map_game[y][x] = 3
-    return mine_arround
+    return mine_around
 
 
-# call in recusrive each tile to test if mine arround
+# call in recursive each tile to test if mine around
 def undercover_recurs(map_game, x, y, coord_mine):
     if map_game[y][x] != 1:
         return 0
-    mine_arround = how_many_mine(map_game, x, y, coord_mine)
+    mine_around = how_many_mine(map_game, x, y, coord_mine)
     rows = len(map_game)
     cols = len(map_game[0])
-    if mine_arround == 0:
+    if mine_around == 0:
         for i in range(max(0, x - 1), min(rows, x + 2)):
             for j in range(max(0, y - 1), min(cols, y + 2)):
                 undercover_tile(map_game, i, j, coord_mine)
-    map_game[y][x] = 3 + mine_arround
+    map_game[y][x] = 3 + mine_around
 
 
-# test its a mine if not call recursive
+# test it's a mine if not call recursive
 def undercover_tile(map_game, x, y, coord_mine):
     if (x, y) in coord_mine:
         Display.lose()
@@ -106,7 +106,7 @@ def action_on_map(map_game, x, y, coord_mine):
                 if undercover_tile(map_game, x, y, coord_mine) == -1:
                     return -1
     else:
-        print("erreur")
+        print("error")
         return map_game
 
 
@@ -207,8 +207,8 @@ def is_win(map_game, coord_mine):
 
 def restart():
     while True:
-        str = AskInputs.AskInputString("Do you want to restart : (type 'Yes' or 'No')", "Yes", "No")
-        if str == "Yes":
+        string_input = AskInputs.AskInputString("Do you want to restart : (type 'Yes' or 'No')", "Yes", "No")
+        if string_input == "Yes":
             game()
         else:
             quit()
