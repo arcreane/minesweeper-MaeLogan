@@ -12,6 +12,7 @@ def InitGame():
                                                                                                   |_|              """)
     print(120 * "*")
 
+
     width = AskInputs.AskInputInt("Enter field width : ")
     height = AskInputs.AskInputInt("Enter field height : ")
     number_mines = AskInputs.AskInputInt("How many mines ? ")
@@ -87,27 +88,29 @@ def CanDoAction(map_game, x, y):
         return False
 
 
-def Undercover_Recurs(map_game, x, y, coord_mine):
-    if map_game[y][x] != 1:
-        return 0
-    neighbors = []
+def how_many_mine(map_game,x,y, coord_mine):
+    mine_arround = 0
     rows = len(map_game)
     cols = len(map_game[0])
-
-    mine_arround = 0
     for i in range(max(0, x - 1), min(rows, x + 2)):
         for j in range(max(0, y - 1), min(cols, y + 2)):
             if (i, j) != (x, y):
                 if (i, j) in coord_mine:
                     mine_arround += 1
                 map_game[y][x] = 3
+    return mine_arround
 
+def Undercover_Recurs(map_game, x, y, coord_mine):
+    if map_game[y][x] != 1:
+        return 0
+    mine_arround = how_many_mine(map_game,x,y,coord_mine)
+    rows = len(map_game)
+    cols = len(map_game[0])
     if mine_arround == 0:
         for i in range(max(0, x - 1), min(rows, x + 2)):
             for j in range(max(0, y - 1), min(cols, y + 2)):
                 Undercover_Tile(map_game, i, j, coord_mine)
     map_game[y][x] = 3 + mine_arround
-    return neighbors
 
 
 def Undercover_Tile(map_game, x, y, coord_mine):
@@ -172,7 +175,7 @@ def is_win(map_game, coord_mine):
 
 
 def Loose():
-    print("\n", 150 * "/\n")
+    print("\n", 150 * "/", end="\n")
     print("""█████ █████                        █████                                         
 ░░███ ░░███                        ░░███                                          
  ░░███ ███    ██████  █████ ████    ░███         ██████   ██████   █████   ██████ 
@@ -186,7 +189,7 @@ def Loose():
 
 
 def Win():
-    print("\n", 150 * "/\n")
+    print("\n", 150 * "/", end="\n")
     print("""█████ █████                        █████   ███   █████  ███            
 ░░███ ░░███                        ░░███   ░███  ░░███  ░░░             
  ░░███ ███    ██████  █████ ████    ░███   ░███   ░███  ████  ████████  
